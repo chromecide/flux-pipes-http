@@ -11,6 +11,7 @@ var fluxPipesHTTP = {
         },
         response: {
             setContentType: require(__dirname+'/lib/actions/response/setContentType.js'),
+            sendHeaders: require(__dirname+'/lib/actions/response/sendHeaders.js'),
             sendJSON: require(__dirname+'/lib/actions/response/sendJSON.js'),
             end: require(__dirname+'/lib/actions/response/end.js'),
         }
@@ -35,6 +36,7 @@ var fluxPipesHTTP = {
         //register a basic JSON response sender
         var sendJSONPipe = new fPipes.pipe();
         sendJSONPipe.use('HTTP:Response:SetContentType:JSON');
+        sendJSONPipe.use(this.actions.response.sendHeaders);
         sendJSONPipe.use('HTTP:Response:SendCTXHTTPResponse:JSON');
         sendJSONPipe.use(this.actions.response.end);
         fPipes.pipes.register('HTTP:SendResponse:JSON', sendJSONPipe);
